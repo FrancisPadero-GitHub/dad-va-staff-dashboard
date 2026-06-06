@@ -1,0 +1,219 @@
+{
+  "tabs": [
+    {
+      "id": "morning",
+      "title": "Morning Open",
+      "icon": "Sun",
+      "groups": [
+        {
+          "id": "morning-0",
+          "title": "Daily Routine Start",
+          "tasks": [
+            { "id": "m0-1", "title": "Check and respond to emails", "subtext": "Review the general inbox and respond to customer or internal inquiries first thing in the morning.", "urgency": "urgent", "badge": "Daily" },
+            { "id": "m0-2", "title": "Send jobs for the day to technicians", "subtext": "Dispatch today's scheduled jobs to the respective techs. Ensure they have the address, customer details, and scope of work.", "urgency": "urgent", "badge": "Dispatch" }
+          ]
+        },
+        {
+          "id": "morning-1",
+          "title": "Klicktiv — Pull & Enter",
+          "tasks": [
+            { "id": "m1-1", "title": "Pull yesterday's Klicktiv daily report PDF", "subtext": "Note: gross revenue, jobs done, company net, estimate pipeline, each tech's job count.", "urgency": "urgent", "badge": "First task" },
+            { "id": "m1-2", "title": "Enter all completed jobs into the Daily P&L sheet", "subtext": "One row per job: Date · Address · Tech · Status (DONE) · Gross Total · Parts Cost · Net After Parts · Tech Pay · Payment Method. DONE jobs only — no estimates here.", "urgency": "urgent", "badge": "Critical" },
+            { "id": "m1-3", "title": "Check for duplicate addresses in the Klicktiv report", "subtext": "Same address under two techs = possible double-billing. Flag to Martin before entering. Do NOT count the same job twice until confirmed.", "urgency": "urgent", "badge": "Critical" },
+            { "id": "m1-4", "title": "Verify you are entering GROSS — not net or company split", "subtext": "Gross = the full invoice amount the customer paid. Never enter the 50% split as the gross. See Calc Reference tab for the correct formula.", "urgency": "urgent", "badge": "Critical" },
+            { "id": "m1-5", "title": "Update status on any PENDING jobs from prior days", "subtext": "Completed → DONE + final total. Still in progress → confirm expected date with tech. Cancelled → CANCELLED + reason.", "urgency": "warn", "badge": "Urgent" }
+          ]
+        },
+        {
+          "id": "morning-2",
+          "title": "Estimates",
+          "tasks": [
+            { "id": "m2-1", "title": "Log all new estimates from yesterday into the Daily Estimates sheet", "subtext": "Required fields: Date · Address · Service Description · Dollar Amount · Tech. Must be logged the same day the estimate is given — every time.", "urgency": "urgent", "badge": "Critical" },
+            { "id": "m2-2", "title": "Update the status on every open estimate", "subtext": "Use only: PENDING · BOOKED · WON · LOST. A blank status makes the estimate invisible to Klicktiv's pipeline tracker.", "urgency": "urgent", "badge": "Critical" },
+            { "id": "m2-3", "title": "Confirm Klicktiv pipeline total matches your estimates sheet", "subtext": "Pipeline = sum of all PENDING + BOOKED estimates. If they don't match, find the discrepancy before moving on.", "urgency": "info", "badge": "Check" }
+          ]
+        },
+        {
+          "id": "morning-3",
+          "title": "Cash & Payments",
+          "tasks": [
+            { "id": "m3-1", "title": "Reconcile cash on hand from yesterday", "subtext": "Cash from each tech must match Klicktiv's 'Cash On Hand' figure. Any gap → contact the tech before close of business.", "urgency": "warn", "badge": "Urgent" },
+            { "id": "m3-2", "title": "Review all PARTIAL jobs — confirm deposit matches Klicktiv", "subtext": "Partials need: deposit amount + full job total + a confirmed completion date. Never leave a partial without a close date.", "urgency": "warn", "badge": "Urgent" },
+            { "id": "m3-3", "title": "Log any refunds issued", "subtext": "Refunds go in the P&L as a negative line item. Record the original job date, reason, and tech.", "urgency": "info", "badge": "Daily" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eod",
+      "title": "End of Day",
+      "icon": "Moon",
+      "groups": [
+        {
+          "id": "eod-1",
+          "title": "Before Closing",
+          "tasks": [
+            { "id": "e1-1", "title": "Confirm every job has a status in Klicktiv", "subtext": "Every job must show FULL, PARTIAL, or CANCELLED before the day closes. A job with no status leaves the P&L incomplete.", "urgency": "urgent", "badge": "Must do" },
+            { "id": "e1-2", "title": "Check review count for the day", "subtext": "If count is 0 → send a reminder to all techs right now. Target: at least 1 review per 5 jobs. Klicktiv tracks this monthly — it affects the business score.", "urgency": "urgent", "badge": "Urgent" },
+            { "id": "e1-3", "title": "Confirm all parts costs are entered in Klicktiv", "subtext": "Parts must be in before close. Missing parts = inflated net = wrong tech payouts.", "urgency": "warn", "badge": "Urgent" },
+            { "id": "e1-4", "title": "Prepare tech payout summaries for Martin's approval", "subtext": "Confirm each tech's rate before calculating. Flag any rate that differs from the agreement. Martin must approve before any payment is sent.", "urgency": "warn", "badge": "Urgent" },
+            { "id": "e1-5", "title": "Send daily summary to Martin", "subtext": "Include: gross revenue · jobs done · company net · pipeline total · any flags or errors. One message, every day, before 8pm.", "urgency": "info", "badge": "Daily" },
+            { "id": "e1-6", "title": "Confirm tomorrow's booked jobs are in Klicktiv", "subtext": "Each booked job needs: address + tech assigned + estimated value. Deposits already collected must be logged.", "urgency": "info", "badge": "Prep" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "klicktiv",
+      "title": "Klicktiv Rules",
+      "icon": "ClipboardList",
+      "groups": [
+        {
+          "id": "klicktiv-1",
+          "title": "Non-Negotiable Daily Rules",
+          "tasks": [
+            { "id": "k1-1", "title": "Every completed job must be in the Daily P&L by 9am the next morning", "subtext": "Klicktiv is the source of truth. The Excel P&L must mirror it exactly. There is currently a backlog of 4+ months of missing entries.", "urgency": "urgent", "badge": "Rule" },
+            { "id": "k1-2", "title": "DONE jobs must always have a dollar total — never leave blank", "subtext": "A DONE status with no total breaks the P&L formula. If the final amount is unconfirmed, mark PENDING until resolved.", "urgency": "urgent", "badge": "Rule" },
+            { "id": "k1-3", "title": "Enter GROSS — the full invoice amount, never the split", "subtext": "The most common error is entering the 50% company split as the gross. Gross is always the number on the customer's receipt.", "urgency": "urgent", "badge": "Rule" },
+            { "id": "k1-4", "title": "Estimates go in the Daily Estimates sheet — never in the P&L", "subtext": "Estimates in the P&L are invisible to Klicktiv's pipeline. An estimate only moves to P&L when the job is completed.", "urgency": "warn", "badge": "Rule" },
+            { "id": "k1-5", "title": "Every estimate needs both a dollar amount AND a status", "subtext": "Missing amount = invisible to pipeline. Missing status = Klicktiv can't track conversion. Both required, every estimate.", "urgency": "urgent", "badge": "Rule" },
+            { "id": "k1-6", "title": "Parts costs must be entered before tech pay is calculated", "subtext": "Formula: Net = (Gross − Parts) × company %. If parts are missing, net is overstated and the tech payout will be wrong.", "urgency": "urgent", "badge": "Rule" }
+          ]
+        },
+        {
+          "id": "klicktiv-2",
+          "title": "Location Tagging",
+          "tasks": [
+            { "id": "k2-1", "title": "Tampa area", "subtext": "Tampa · Brandon · Riverview · Seffner · Land O' Lakes · Lutz · Wesley Chapel · Wimauma · Lithia · Plant City · Zephyrhills · Odessa · Valrico · Lakeland · Polk City · Apollo Beach", "urgency": "info", "badge": "Tag" },
+            { "id": "k2-2", "title": "St. Pete area", "subtext": "St. Petersburg · Clearwater · Dunedin · Palm Harbor · Largo · Pinellas Park · Seminole · Safety Harbor · Holiday · Hudson · New Port Richey · Port Richey", "urgency": "info", "badge": "Tag" },
+            { "id": "k2-3", "title": "Sarasota area", "subtext": "Sarasota · Venice · Nokomis · Bradenton · North Port · Englewood · Palmetto · Lakewood Ranch", "urgency": "info", "badge": "Tag" },
+            { "id": "k2-4", "title": "Naples area", "subtext": "Naples · Fort Myers · Cape Coral · Marco Island · Port Charlotte · Punta Gorda · Estero · Bonita Springs", "urgency": "info", "badge": "Tag" },
+            { "id": "k2-5", "title": "Miami / Palm Beach area", "subtext": "Miami · Weston · Boynton Beach · Palm Beach Gardens · Tamarac · Boca Raton · Fort Lauderdale · Coral Springs", "urgency": "info", "badge": "Tag" },
+            { "id": "k2-6", "title": "Other areas", "subtext": "Orlando · Kissimmee · Winter Garden · Windermere · DeBary · Longwood · Ocala · Brooksville · Spring Hill · Hudson · Lake Suzy", "urgency": "info", "badge": "Tag" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "calc",
+      "title": "Calc Reference",
+      "icon": "Calculator",
+      "groups": [
+        {
+          "id": "calc-1",
+          "title": "The Three Definitions",
+          "tasks": [
+            { "id": "c1-1", "title": "GROSS = the full amount on the customer's invoice", "subtext": "Before any deductions. Not the tech's share. Not the company share. Not the net. If the customer paid $1,799, gross = $1,799.", "urgency": "urgent", "badge": "Definition 1" },
+            { "id": "c1-2", "title": "NET AFTER PARTS = Gross minus the cost of materials used", "subtext": "If no parts → Net After Parts = Gross. If parts were used → subtract them first. Example: $1,799 gross − $50 parts = $1,749 net after parts.", "urgency": "urgent", "badge": "Definition 2" },
+            { "id": "c1-3", "title": "COMPANY NET = Net After Parts × the company's percentage", "subtext": "The split always applies to Net After Parts, not Gross. Example (50%): $1,749 × 50% = $874.50.", "urgency": "urgent", "badge": "Definition 3" }
+          ]
+        },
+        {
+          "id": "calc-2",
+          "title": "Common Errors — Check Every Report",
+          "tasks": [
+            { "id": "c2-1", "title": "Sub / 3 Bros gross and net not swapped", "subtext": "Most frequent error: entering $874.50 (the 50% split) as the gross instead of $1,799.", "urgency": "urgent", "badge": "Check" },
+            { "id": "c2-2", "title": "All of each tech's jobs included — not just one", "subtext": "When a tech has multiple jobs in a day, every job must be summed.", "urgency": "urgent", "badge": "Check" },
+            { "id": "c2-3", "title": "3 Bros - DAD is 50% rate, not 75%", "subtext": "3 Bros - DAD is always 50/50. Only Tamir and Shalom are on 75% company.", "urgency": "urgent", "badge": "Check" },
+            { "id": "c2-4", "title": "3 Bros - SUB gross includes all jobs for the day", "subtext": "Count jobs in Klicktiv and confirm all are included. A single missed job can leave the daily gross short by hundreds of dollars.", "urgency": "warn", "badge": "Check" },
+            { "id": "c2-5", "title": "No duplicate jobs from the same address", "subtext": "If the same address appears under two techs, confirm with Martin before counting it twice. Split-commission jobs sometimes appear twice in Klicktiv.", "urgency": "warn", "badge": "Check" },
+            { "id": "c2-6", "title": "Daily Gross & Net sheet — correct column assignment", "subtext": "Col A–C: Sub (50%) · Col E–G: 3 Bros SUB + DAD combined (50%) · Col I–K: Tamir (75% co). Enter date, gross, and calculated net in the right group.", "urgency": "info", "badge": "Reference" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "weekly",
+      "title": "Weekly",
+      "icon": "Calendar",
+      "groups": [
+        {
+          "id": "weekly-1",
+          "title": "Every Monday",
+          "tasks": [
+            { "id": "w1-1", "title": "Run the weekly location report", "subtext": "Group last week's jobs by: Tampa · St. Pete · Sarasota · Naples · Miami-Palm Beach · Other. For each area: jobs done, gross, parts, net, tech pay. Send to Martin.", "urgency": "info", "badge": "Monday" },
+            { "id": "w1-2", "title": "Review all PENDING estimates older than 7 days", "subtext": "Follow-up call required or change to LOST. Stale estimates inflate the Klicktiv pipeline and mislead revenue planning.", "urgency": "warn", "badge": "Monday" },
+            { "id": "w1-3", "title": "Prepare weekly tech payout summaries for Martin", "subtext": "Per tech: jobs done · total gross · parts deducted · net after parts · rate · payout amount · cash on hand. Martin must approve before any payment is made.", "urgency": "info", "badge": "Monday" },
+            { "id": "w1-4", "title": "Spot-check 5 prior-week P&L entries against Klicktiv", "subtext": "Pick 5 random jobs. Open the Klicktiv PDF for that day. Confirm gross, parts, net, and tech pay all match the Excel P&L exactly. Flag any discrepancy to Martin.", "urgency": "warn", "badge": "Audit" },
+            { "id": "w1-5", "title": "Check review coverage rate for the week", "subtext": "Jobs done vs reviews collected. If below 20%, escalate to Martin and remind all techs at the Monday morning briefing.", "urgency": "info", "badge": "Monday" }
+          ]
+        },
+        {
+          "id": "weekly-2",
+          "title": "Every Friday",
+          "tasks": [
+            { "id": "w2-1", "title": "Reconcile all PARTIAL jobs from the week", "subtext": "Any job still PARTIAL on Friday must have a confirmed completion date before the weekend. No partials without a close date.", "urgency": "warn", "badge": "Friday" },
+            { "id": "w2-2", "title": "Confirm next week's booked jobs are in Klicktiv", "subtext": "Each booked job: address + tech assigned + estimated value. Deposits already collected must be logged.", "urgency": "info", "badge": "Prep" },
+            { "id": "w2-3", "title": "Send the weekly summary to Martin", "subtext": "Weekly gross · jobs done · company net · best area · review count · open pipeline · unresolved flags from the week.", "urgency": "info", "badge": "Friday" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "monthly",
+      "title": "Monthly",
+      "icon": "Calendar",
+      "groups": [
+        {
+          "id": "monthly-1",
+          "title": "Monthly Reporting",
+          "tasks": [
+            { "id": "mo1-1", "title": "Prepare Monthly Revenue Report", "subtext": "Summarize total gross revenue, net revenue, and parts cost for the entire month. Submit to Martin.", "urgency": "info", "badge": "Timeline: 1st" },
+            { "id": "mo1-2", "title": "Monthly Technician Payout Reconciliation", "subtext": "Verify that all weekly payouts match the final monthly totals. Flag any over/under payments.", "urgency": "warn", "badge": "Timeline: 2nd" },
+            { "id": "mo1-3", "title": "Review overall business score and review counts", "subtext": "Calculate the average review count ratio (target 1 per 5 jobs) across all completed jobs for the month.", "urgency": "info", "badge": "Timeline: 3rd" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flags",
+      "title": "Open Issues",
+      "icon": "AlertTriangle",
+      "groups": [
+        {
+          "id": "flags-1",
+          "title": "Backlog — Must Be Resolved",
+          "tasks": [
+            { "id": "f1-1", "title": "Enter Jan 10 – present into the Daily P&L", "subtext": "P&L stops at Jan 9, 2026. 700+ completed jobs are missing. Work forward from Jan 10 using daily Klicktiv PDFs as the source, one day at a time.", "urgency": "urgent", "badge": "Backlog" },
+            { "id": "f1-2", "title": "Add a status to all 12 carry-over estimates (Dec/Jan)", "subtext": "Every estimate in the Daily Estimates sheet has no status. Each needs PENDING · WON · LOST · or BOOKED. These are distorting the Klicktiv pipeline total.", "urgency": "urgent", "badge": "Urgent" },
+            { "id": "f1-3", "title": "Add dollar amount: 99 Spring Ave, Anna Maria (Shalom, Jan 5)", "subtext": "This estimate has no dollar amount. Ask Shalom what price was quoted and enter it. No amount = invisible to Klicktiv.", "urgency": "urgent", "badge": "Urgent" },
+            { "id": "f1-4", "title": "Move 16 estimates from the P&L sheet → Daily Estimates sheet", "subtext": "16 rows with ESTIMATE status are inside the Daily P&L. Must be moved to Daily Estimates so Klicktiv includes them in pipeline tracking.", "urgency": "urgent", "badge": "Housekeeping" }
+          ]
+        },
+        {
+          "id": "flags-2",
+          "title": "Pending Jobs — Confirm Completion",
+          "tasks": [
+            { "id": "f2-1", "title": "Close: 8857 CypressHammock Dr (Yotam, Jan 5)", "subtext": "Total $1,620 · Deposit $300 · Status still PENDING. Confirm with Yotam — if completed, update to DONE and enter $1,620 total.", "urgency": "warn", "badge": "Pending" },
+            { "id": "f2-2", "title": "Close: 12833 Poinsettia Ave, Seminole (Sub, Jan 7)", "subtext": "Total $6,100 · Deposit $3,050 · Status still PENDING. Confirm with Sub team — if completed, DONE + $6,100 total.", "urgency": "warn", "badge": "Pending" },
+            { "id": "f2-3", "title": "Resolve duplicate address — 6720 Pine Springs Dr, Wesley Chapel", "subtext": "Appeared under both Tamir (25%) and 3 Bros-DAD (50%) on May 20. Confirm with Martin: one job with a split, or two separate jobs? Do not count twice until resolved.", "urgency": "warn", "badge": "Verify" }
+          ]
+        },
+        {
+          "id": "flags-3",
+          "title": "Confirm with Martin",
+          "tasks": [
+            { "id": "f3-1", "title": "Confirm Tamir's current commission rate", "subtext": "April 2026: Tamir was 50/50. May 2026 shows 75% Co / 25% Tech. Clarify which rate applies going forward so all payouts are calculated correctly.", "urgency": "info", "badge": "Verify" },
+            { "id": "f3-2", "title": "Set up daily estimate reporting process with all techs", "subtext": "Every tech must report estimates the same day. Create a simple WhatsApp template: address + service description + dollar amount. This keeps the Klicktiv pipeline accurate in real time.", "urgency": "ok", "badge": "Process" }
+          ]
+        }
+      ]
+    }
+  ],
+  "commissionRates": [
+    { "tech": "Aviran", "split": "40% tech / 60% co", "coNet": "60%", "note": "Highest earner — double-check every payout" },
+    { "tech": "Tamir", "split": "25% tech / 75% co", "coNet": "75%", "note": "⚠ Changed from 50/50 in April — confirm current rate with Martin" },
+    { "tech": "Shalom", "split": "25% tech / 75% co", "coNet": "75%", "note": "Confirm still current" },
+    { "tech": "Sub", "split": "50% / 50%", "coNet": "50%", "note": "—" },
+    { "tech": "3 Bros - SUB", "split": "50% / 50%", "coNet": "50%", "note": "—" },
+    { "tech": "Sub - DAD", "split": "50% / 50%", "coNet": "50%", "note": "—" },
+    { "tech": "3 Bros - DAD", "split": "50% / 50%", "coNet": "50%", "note": "NOT 75% — common error" },
+    { "tech": "Yotam", "split": "50% / 50%", "coNet": "50%", "note": "—" }
+  ],
+  "formulas": [
+    { "step": "Step 1", "equation": "Net After Parts = Gross − Parts Cost", "example": "$1,799 − $50 = $1,749" },
+    { "step": "50% co split", "equation": "Co Net = Net After Parts × 0.50", "example": "$1,749 × 0.50 = $874.50" },
+    { "step": "75% co split", "equation": "Co Net = Net After Parts × 0.75", "example": "$396 × 0.75 = $297.00" },
+    { "step": "60% co split", "equation": "Co Net = Net After Parts × 0.60", "example": "$2,000 × 0.60 = $1,200" }
+  ]
+}

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ducts All Done — Office Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ── Brand palette from logo ── */
+  :root {
+    --bg:        #0B1A1D;
+    --surface:   #0F2228;
+    --surface2:  #162D34;
+    --surface3:  #1C3840;
+    --border:    #1F3F48;
+    --border2:   #2A5260;
+    --pipe:      #36B3CE;   /* bright cyan pipe */
+    --pipe-dk:   #237A8E;   /* darker cyan */
+    --unit:      #2A8A85;   /* teal unit */
+    --unit-lt:   #3AAFA9;   /* light teal */
+    --tagline:   #0D181C;   /* near-black tagline bg */
+    --text:      #E8F4F6;
+    --text2:     #8BB8C2;
+    --text3:     #4A7480;
+    --accent:    #36B3CE;   /* pipe cyan = primary accent */
+    --green:     #3AAFA9;   /* unit teal = success */
+    --green-bg:  rgba(58,175,169,.12);
+    --red:       #E05555;
+    --red-bg:    rgba(224,85,85,.1);
+    --amber:     #D4933A;
+    --amber-bg:  rgba(212,147,58,.1);
+    --blue:      #4FA8D0;
+    --blue-bg:   rgba(79,168,208,.1);
+    --mono:      'DM Mono', monospace;
+    --display:   'Barlow Condensed', sans-serif;
+    --body:      'Barlow', sans-serif;
+    --r: 8px; --rs: 5px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{font-size:14px;}
+  body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;display:flex;flex-direction:column;}
+
+  /* ── Topbar ── */
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;border-bottom:2px solid var(--border);background:var(--tagline);position:sticky;top:0;z-index:100;flex-shrink:0;}
+  .tb-left{display:flex;align-items:center;gap:14px;}
+  /* SVG logo mark */
+  .logo-mark{flex-shrink:0;}
+  .tb-brand{display:flex;flex-direction:column;gap:0;}
+  .tb-title{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:.04em;text-transform:uppercase;color:var(--pipe);line-height:1;}
+  .tb-tagline{font-family:var(--body);font-size:10px;font-weight:500;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-top:1px;}
+  .tb-sep{width:1px;height:28px;background:var(--border2);}
+  .tb-module{font-size:12px;color:var(--text3);font-family:var(--mono);}
+  .tb-right{display:flex;align-items:center;gap:10px;}
+  .prog-pill{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border2);border-radius:99px;padding:5px 14px;}
+  .prog-pill-bar{width:90px;height:4px;background:var(--border2);border-radius:99px;overflow:hidden;}
+  .prog-pill-fill{height:100%;background:var(--pipe);border-radius:99px;transition:width .4s ease;}
+  .prog-pill-txt{font-family:var(--mono);font-size:11px;color:var(--text2);min-width:28px;}
+  .date-badge{font-family:var(--mono);font-size:11px;color:var(--text3);background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:4px 10px;}
+
+  /* ── Layout ── */
+  .layout{display:flex;flex:1;overflow:hidden;height:calc(100vh - 56px);}
+
+  /* ── Sidebar ── */
+  .sidebar{width:216px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;}
+  .sb-sec{padding:18px 12px 8px;}
+  .sb-lbl{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;padding:0 6px;margin-bottom:8px;}
+  .nav-item{display:flex;align-items:center;gap:9px;padding:8px 8px;border-radius:var(--rs);cursor:pointer;margin-bottom:2px;border:1px solid transparent;transition:all .15s;}
+  .nav-item:hover{background:var(--surface2);}
+  .nav-item.active{background:var(--surface3);border-color:var(--border2);}
+  .nav-item.active .nav-accent{opacity:1;}
+  .nav-accent{width:3px;height:28px;border-radius:2px;background:var(--pipe);flex-shrink:0;opacity:0;transition:opacity .2s;}
+  .nav-icon{font-size:15px;flex-shrink:0;width:20px;text-align:center;}
+  .nav-txt{flex:1;min-width:0;}
+  .nav-name{font-family:var(--display);font-size:14px;font-weight:700;letter-spacing:.02em;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase;}
+  .nav-item.active .nav-name{color:var(--pipe);}
+  .nav-prog{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:1px;}
+  .nav-bar{width:100%;height:2px;background:var(--border);border-radius:99px;margin-top:4px;overflow:hidden;}
+  .nav-bar-fill{height:100%;border-radius:99px;transition:width .3s;}
+  .badge-dot{min-width:18px;height:18px;border-radius:99px;font-family:var(--mono);font-size:9px;font-weight:500;display:flex;align-items:center;justify-content:center;padding:0 4px;background:var(--red-bg);color:var(--red);border:1px solid var(--red);}
+  .sb-stats{margin-top:auto;padding:14px 14px;border-top:2px solid var(--border);}
+  .s-row{display:flex;justify-content:space-between;align-items:baseline;padding:3px 0;}
+  .s-lbl{font-size:11px;color:var(--text3);}
+  .s-val{font-family:var(--mono);font-size:11px;color:var(--text);}
+  .s-val.g{color:var(--green);}
+  .s-val.w{color:var(--amber);}
+  .divider{height:1px;background:var(--border);margin:8px 0;}
+
+  /* ── Main ── */
+  .main{flex:1;overflow-y:auto;padding:26px 30px;}
+
+  /* Section header */
+  .sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+  .sec-hdr-l{display:flex;align-items:center;gap:14px;}
+  .sec-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:1px solid var(--border2);}
+  .sec-title{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:.04em;text-transform:uppercase;}
+  .sec-count{font-size:12px;color:var(--text3);margin-top:2px;font-family:var(--mono);}
+  .reset-btn{font-family:var(--mono);font-size:11px;color:var(--text3);background:var(--surface2);border:1px solid var(--border2);border-radius:var(--rs);padding:5px 11px;cursor:pointer;transition:all .15s;letter-spacing:.04em;text-transform:uppercase;}
+  .reset-btn:hover{color:var(--pipe);border-color:var(--pipe);}
+
+  /* Progress */
+  .prog-track{height:3px;background:var(--border2);border-radius:99px;overflow:hidden;margin-bottom:24px;}
+  .prog-fill{height:100%;border-radius:99px;transition:width .4s ease;}
+
+  /* Group */
+  .group{margin-bottom:26px;}
+  .group-title{font-family:var(--display);font-size:11px;font-weight:700;color:var(--pipe-dk);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;padding-left:3px;border-left:2px solid var(--pipe-dk);padding-left:8px;}
+
+  /* Task */
+  .task{display:flex;align-items:flex-start;gap:11px;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:5px;cursor:pointer;transition:background .12s,border-color .12s,opacity .2s;}
+  .task:hover{background:var(--surface2);border-color:var(--border2);}
+  .task.done{opacity:.4;}
+  .task.done .task-text{text-decoration:line-through;color:var(--text3);}
+  .task.urgent:not(.done){border-left:3px solid var(--red);}
+  .task.warn:not(.done){border-left:3px solid var(--amber);}
+  .task.info:not(.done){border-left:3px solid var(--pipe);}
+  .task.ok:not(.done){border-left:3px solid var(--green);}
+  .checkbox{width:19px;height:19px;border-radius:5px;flex-shrink:0;margin-top:1px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;transition:all .15s;}
+  .task.done .checkbox{background:var(--green);border-color:var(--green);}
+  .checkmark{display:none;color:#0B1A1D;font-size:11px;font-weight:800;}
+  .task.done .checkmark{display:block;}
+  .task-body{flex:1;min-width:0;}
+  .task-text{font-size:13px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:3px;}
+  .task-sub{font-size:11.5px;color:var(--text3);line-height:1.55;}
+  .task-badge{font-family:var(--mono);font-size:9px;font-weight:500;padding:2px 8px;border-radius:99px;flex-shrink:0;margin-top:1px;white-space:nowrap;align-self:flex-start;letter-spacing:.04em;text-transform:uppercase;}
+  .b-red{background:var(--red-bg);color:var(--red);border:1px solid rgba(224,85,85,.3);}
+  .b-amb{background:var(--amber-bg);color:var(--amber);border:1px solid rgba(212,147,58,.3);}
+  .b-blue{background:var(--blue-bg);color:var(--blue);border:1px solid rgba(79,168,208,.3);}
+  .b-grn{background:var(--green-bg);color:var(--green);border:1px solid rgba(58,175,169,.3);}
+  .b-gray{background:var(--surface2);color:var(--text3);border:1px solid var(--border2);}
+  .b-pipe{background:rgba(54,179,206,.1);color:var(--pipe);border:1px solid rgba(54,179,206,.3);}
+
+  /* Panel */
+  .panel{display:none;}
+  .panel.active{display:block;animation:fadeIn .18s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+
+  /* Tables */
+  .table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--r);margin-top:10px;}
+  .rt{width:100%;border-collapse:collapse;}
+  .rt th{font-family:var(--display);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--pipe-dk);padding:8px 12px;border-bottom:1px solid var(--border2);text-align:left;background:var(--surface2);}
+  .rt td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:12.5px;color:var(--text2);}
+  .rt tr:last-child td{border-bottom:none;}
+  .rt .tc{font-weight:600;color:var(--text);}
+  .rt .tm{font-family:var(--mono);font-size:12px;}
+  .rt .tn{font-size:11px;color:var(--text3);}
+  .rt .wr td{background:rgba(212,147,58,.04);}
+
+  /* Formula box */
+  .fbox{background:var(--surface2);border:1px solid var(--border2);border-left:3px solid var(--pipe);border-radius:var(--r);padding:16px 18px;margin:8px 0 16px;}
+  .fbox .ft{font-family:var(--display);font-size:11px;font-weight:700;color:var(--pipe);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;}
+  .fl{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+  .fl:last-child{margin-bottom:0;}
+  .fl-lbl{color:var(--text3);min-width:100px;font-size:11px;font-family:var(--mono);}
+  .fl-eq{font-family:var(--mono);color:var(--text2);font-size:11.5px;flex:1;}
+  .fl-ex{font-family:var(--mono);font-size:11px;color:var(--pipe);background:rgba(54,179,206,.08);padding:3px 8px;border-radius:4px;white-space:nowrap;}
+
+  /* Rail */
+  .rail{width:196px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;padding:18px 14px;}
+  .rail-sec{margin-bottom:20px;}
+  .rail-title{font-family:var(--display);font-size:11px;font-weight:700;color:var(--pipe-dk);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
+  .mb{margin-bottom:10px;}
+  .mb-lbl{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;}
+  .mb-lbl span:first-child{color:var(--text2);font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.04em;font-size:11px;}
+  .mb-lbl span:last-child{font-family:var(--mono);color:var(--text3);font-size:10px;}
+  .mt{height:3px;background:var(--border2);border-radius:99px;overflow:hidden;}
+  .mf{height:100%;border-radius:99px;transition:width .3s;}
+  .ui{font-size:11px;color:var(--red);padding:6px 0;border-bottom:1px solid var(--border);line-height:1.4;}
+  .ui:last-child{border-bottom:none;}
+  .un{font-size:11px;color:var(--green);font-family:var(--mono);}
+  .ic{font-family:var(--display);font-size:40px;font-weight:800;letter-spacing:-1px;line-height:1;}
+  .il{font-size:11px;color:var(--text3);margin-top:3px;}
+
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px;}
+  @media(max-width:900px){.rail{display:none;}}
+  @media(max-width:600px){.sidebar{width:54px;}.nav-txt,.nav-accent{display:none;}.nav-icon{width:100%;}}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="tb-left">
+    <!-- SVG logo mark: duct pipe + unit -->
+    <svg class="logo-mark" width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="46" height="46" rx="8" fill="#0D181C"/>
+      <!-- pipe vertical -->
+      <rect x="17" y="4" width="8" height="16" rx="2" fill="#36B3CE"/>
+      <!-- pipe elbow -->
+      <path d="M17 14 Q17 22 10 22" stroke="#36B3CE" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <!-- unit body -->
+      <rect x="8" y="26" width="30" height="14" rx="3" fill="#2A8A85"/>
+      <!-- unit grille lines -->
+      <line x1="14" y1="29" x2="14" y2="37" stroke="#1A5550" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="19" y1="29" x2="19" y2="37" stroke="#1A5550" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="24" y1="29" x2="24" y2="37" stroke="#1A5550" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="29" y1="29" x2="29" y2="37" stroke="#1A5550" stroke-width="1.5" stroke-linecap="round"/>
+      <!-- air flow dots -->
+      <circle cx="17" cy="42" r="1.5" fill="#36B3CE" opacity="0.7"/>
+      <circle cx="23" cy="43" r="1.5" fill="#36B3CE" opacity="0.5"/>
+      <circle cx="29" cy="42" r="1.5" fill="#36B3CE" opacity="0.7"/>
+    </svg>
+    <div class="tb-brand">
+      <div class="tb-title">Ducts All Done</div>
+      <div class="tb-tagline">Clean Air Begins With Clear Ducts</div>
+    </div>
+    <div class="tb-sep"></div>
+    <span class="tb-module">Office Staff Dashboard</span>
+  </div>
+  <div class="tb-right">
+    <div class="prog-pill">
+      <div class="prog-pill-bar"><div class="prog-pill-fill" id="overall-bar" style="width:0%"></div></div>
+      <span class="prog-pill-txt" id="overall-txt">0%</span>
+    </div>
+    <div class="date-badge" id="today-date"></div>
+  </div>
+</div>
+
+<!-- Layout -->
+<div class="layout">
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sb-sec">
+    <div class="sb-lbl">Checklists</div>
+
+    <div class="nav-item active" onclick="switchTab('morning',this)" data-tab="morning">
+      <div class="nav-accent"></div><div class="nav-icon">☀️</div>
+      <div class="nav-txt"><div class="nav-name">Morning Open</div><div class="nav-prog" id="np-morning">0/0</div><div class="nav-bar"><div class="nav-bar-fill" id="nb-morning" style="width:0%;background:var(--amber)"></div></div></div>
+    </div>
+    <div class="nav-item" onclick="switchTab('eod',this)" data-tab="eod">
+      <div class="nav-accent"></div><div class="nav-icon">🌙</div>
+      <div class="nav-txt"><div class="nav-name">End of Day</div><div class="nav-prog" id="np-eod">0/0</div><div class="nav-bar"><div class="nav-bar-fill" id="nb-eod" style="width:0%;background:var(--pipe)"></div></div></div>
+    </div>
+    <div class="nav-item" onclick="switchTab('klicktiv',this)" data-tab="klicktiv">
+      <div class="nav-accent"></div><div class="nav-icon">📋</div>
+      <div class="nav-txt"><div class="nav-name">Klicktiv Rules</div><div class="nav-prog" id="np-klicktiv">0/0</div><div class="nav-bar"><div class="nav-bar-fill" id="nb-klicktiv" style="width:0%;background:var(--pipe)"></div></div></div>
+    </div>
+    <div class="nav-item" onclick="switchTab('calc',this)" data-tab="calc">
+      <div class="nav-accent"></div><div class="nav-icon">🧮</div>
+      <div class="nav-txt"><div class="nav-name">Calc Reference</div><div class="nav-prog" id="np-calc">0/0</div><div class="nav-bar"><div class="nav-bar-fill" id="nb-calc" style="width:0%;background:var(--amber)"></div></div></div>
+    </div>
+    <div class="nav-item" onclick="switchTab('weekly',this)" data-tab="weekly">
+      <div class="nav-accent"></div><div class="nav-icon">📅</div>
+      <div class="nav-txt"><div class="nav-name">Weekly</div><div class="nav-prog" id="np-weekly">0/0</div><div class="nav-bar"><div class="nav-bar-fill" id="nb-weekly" style="width:0%;background:var(--green)"></div></div></div>
+    </div>
+    <div class="nav-item" onclick="switchTab('flags',this)" data-tab="flags">
+      <div class="nav-accent"></div><div class="nav-icon">🚨</div>
+      <div class="nav-txt"><div class="nav-name">Open Issues</div><div class="nav-prog" id="np-flags">0/0</div><div class="nav-bar"><div class="nav-bar-fill" id="nb-flags" style="width:0%;background:var(--red)"></div></div></div>
+      <div class="badge-dot" id="flags-badge">9</div>
+    </div>
+  </div>
+
+  <div class="sb-stats">
+    <div class="sb-lbl">Commission Rates</div>
+    <div class="s-row"><span class="s-lbl">Sub / 3 Bros / DAD</span><span class="s-val">50 / 50</span></div>
+    <div class="s-row"><span class="s-lbl">Aviran</span><span class="s-val">40% tech</span></div>
+    <div class="s-row"><span class="s-lbl">Tamir</span><span class="s-val w">25% tech ⚠</span></div>
+    <div class="s-row"><span class="s-lbl">Shalom</span><span class="s-val">25% tech</span></div>
+    <div class="divider"></div>
+    <div class="sb-lbl">Net Formula</div>
+    <div class="s-row"><span class="s-lbl">Step 1</span><span class="s-val g">Gross − Parts</span></div>
+    <div class="s-row"><span class="s-lbl">Step 2</span><span class="s-val g">× Co %</span></div>
+  </div>
+</nav>
+
+<!-- Main panels -->
+<main class="main">
+
+<!-- ══ MORNING ══ -->
+<div class="panel active" id="panel-morning">
+  <div class="sec-hdr">
+    <div class="sec-hdr-l">
+      <div class="sec-icon" style="background:rgba(212,147,58,.1);border-color:rgba(212,147,58,.3)">☀️</div>
+      <div><div class="sec-title" style="color:var(--amber)">Morning Open</div><div class="sec-count" id="sc-morning">0 of 0 complete</div></div>
+    </div>
+    <button class="reset-btn" onclick="resetTab('morning')">↺ Reset</button>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="pt-morning" style="width:0%;background:var(--amber)"></div></div>
+  <div class="group">
+    <div class="group-title">Klicktiv — Pull & Enter</div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="morning"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Pull yesterday's Klicktiv daily report PDF</div><div class="task-sub">Note: gross revenue, jobs done, company net, estimate pipeline, each tech's job count.</div></div><span class="task-badge b-red">First task</span></div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="morning"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Enter all completed jobs into the Daily P&L sheet</div><div class="task-sub">One row per job: Date · Address · Tech · Status (DONE) · Gross Total · Parts Cost · Net After Parts · Tech Pay · Payment Method. DONE jobs only — no estimates here.</div></div><span class="task-badge b-red">Critical</span></div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="morning"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Check for duplicate addresses in the Klicktiv report</div><div class="task-sub">Same address under two techs = possible double-billing. Flag to Martin before entering. Do NOT count the same job twice until confirmed.</div></div><span class="task-badge b-red">Critical</span></div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="morning"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Verify you are entering GROSS — not net or company split</div><div class="task-sub">Gross = the full invoice amount the customer paid. Never enter the 50% split as the gross. See Calc Reference tab for the correct formula.</div></div><span class="task-badge b-red">Critical</span></div>
+    <div class="task warn" onclick="toggle(this)" data-tab="morning"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Update status on any PENDING jobs from prior days</div><div class="task-sub">Completed → DONE + final total. Still in progress → confirm expected date with tech. Cancelled → CANCELLED + reason.</div></div><span class="task-badge b-amb">Urgent</span></div>
+  </div>
+  <div class="group">
+    <div class="group-title">Estimates</div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="morning"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Log all new estimates from yesterday into the Daily Estimates sheet</div><div class="task-sub">Required fields: Date · Address · Service Description · Dollar Amount · Tech. Must be logged the same day the estimate is given — every time.</div></div><span class="task-badge b-red">Critical</span></div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="morning"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Update the status on every open estimate</div><div class="task-sub">Use only: PENDING · BOOKED · WON · LOST. A blank status makes the estimate invisible to Klicktiv's pipeline tracker.</div></div><span class="task-badge b-red">Critical</span></div>
+    <div class="task info" onclick="toggle(this)" data-tab="morning"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Confirm Klicktiv pipeline total matches your estimates sheet</div><div class="task-sub">Pipeline = sum of all PENDING + BOOKED estimates. If they don't match, find the discrepancy before moving on.</div></div><span class="task-badge b-pipe">Check</span></div>
+  </div>
+  <div class="group">
+    <div class="group-title">Cash & Payments</div>
+    <div class="task warn" onclick="toggle(this)" data-tab="morning"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Reconcile cash on hand from yesterday</div><div class="task-sub">Cash from each tech must match Klicktiv's "Cash On Hand" figure. Any gap → contact the tech before close of business.</div></div><span class="task-badge b-amb">Urgent</span></div>
+    <div class="task warn" onclick="toggle(this)" data-tab="morning"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Review all PARTIAL jobs — confirm deposit matches Klicktiv</div><div class="task-sub">Partials need: deposit amount + full job total + a confirmed completion date. Never leave a partial without a close date.</div></div><span class="task-badge b-amb">Urgent</span></div>
+    <div class="task info" onclick="toggle(this)" data-tab="morning"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Log any refunds issued</div><div class="task-sub">Refunds go in the P&L as a negative line item. Record the original job date, reason, and tech.</div></div><span class="task-badge b-pipe">Daily</span></div>
+  </div>
+</div>
+
+<!-- ══ EOD ══ -->
+<div class="panel" id="panel-eod">
+  <div class="sec-hdr">
+    <div class="sec-hdr-l">
+      <div class="sec-icon" style="background:rgba(54,179,206,.08);border-color:var(--border2)">🌙</div>
+      <div><div class="sec-title" style="color:var(--pipe)">End of Day</div><div class="sec-count" id="sc-eod">0 of 0 complete</div></div>
+    </div>
+    <button class="reset-btn" onclick="resetTab('eod')">↺ Reset</button>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="pt-eod" style="width:0%;background:var(--pipe)"></div></div>
+  <div class="group">
+    <div class="group-title">Before Closing</div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="eod"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Confirm every job has a status in Klicktiv</div><div class="task-sub">Every job must show FULL, PARTIAL, or CANCELLED before the day closes. A job with no status leaves the P&L incomplete.</div></div><span class="task-badge b-red">Must do</span></div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="eod"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Check review count for the day</div><div class="task-sub">If count is 0 → send a reminder to all techs right now. Target: at least 1 review per 5 jobs. Klicktiv tracks this monthly — it affects the business score.</div></div><span class="task-badge b-red">Urgent</span></div>
+    <div class="task warn" onclick="toggle(this)" data-tab="eod"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Confirm all parts costs are entered in Klicktiv</div><div class="task-sub">Parts must be in before close. Missing parts = inflated net = wrong tech payouts.</div></div><span class="task-badge b-amb">Urgent</span></div>
+    <div class="task warn" onclick="toggle(this)" data-tab="eod"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Prepare tech payout summaries for Martin's approval</div><div class="task-sub">Confirm each tech's rate before calculating. Flag any rate that differs from the agreement. Martin must approve before any payment is sent.</div></div><span class="task-badge b-amb">Urgent</span></div>
+    <div class="task info" onclick="toggle(this)" data-tab="eod"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Send daily summary to Martin</div><div class="task-sub">Include: gross revenue · jobs done · company net · pipeline total · any flags or errors. One message, every day, before 8pm.</div></div><span class="task-badge b-pipe">Daily</span></div>
+    <div class="task info" onclick="toggle(this)" data-tab="eod"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Confirm tomorrow's booked jobs are in Klicktiv</div><div class="task-sub">Each booked job needs: address + tech assigned + estimated value. Deposits already collected must be logged.</div></div><span class="task-badge b-gray">Prep</span></div>
+  </div>
+</div>
+
+<!-- ══ KLICKTIV RULES ══ -->
+<div class="panel" id="panel-klicktiv">
+  <div class="sec-hdr">
+    <div class="sec-hdr-l">
+      <div class="sec-icon" style="background:rgba(54,179,206,.08);border-color:var(--border2)">📋</div>
+      <div><div class="sec-title" style="color:var(--pipe)">Klicktiv Rules</div><div class="sec-count" id="sc-klicktiv">0 of 0 complete</div></div>
+    </div>
+    <button class="reset-btn" onclick="resetTab('klicktiv')">↺ Reset</button>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="pt-klicktiv" style="width:0%;background:var(--pipe)"></div></div>
+  <div class="group">
+    <div class="group-title">Non-Negotiable Daily Rules</div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="klicktiv"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Every completed job must be in the Daily P&L by 9am the next morning</div><div class="task-sub">Klicktiv is the source of truth. The Excel P&L must mirror it exactly. There is currently a backlog of 4+ months of missing entries.</div></div><span class="task-badge b-red">Rule</span></div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="klicktiv"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">DONE jobs must always have a dollar total — never leave blank</div><div class="task-sub">A DONE status with no total breaks the P&L formula. If the final amount is unconfirmed, mark PENDING until resolved.</div></div><span class="task-badge b-red">Rule</span></div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="klicktiv"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Enter GROSS — the full invoice amount, never the split</div><div class="task-sub">The most common error is entering the 50% company split as the gross. Gross is always the number on the customer's receipt.</div></div><span class="task-badge b-red">Rule</span></div>
+    <div class="task warn" onclick="toggle(this)" data-tab="klicktiv"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Estimates go in the Daily Estimates sheet — never in the P&L</div><div class="task-sub">Estimates in the P&L are invisible to Klicktiv's pipeline. An estimate only moves to P&L when the job is completed.</div></div><span class="task-badge b-amb">Rule</span></div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="klicktiv"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Every estimate needs both a dollar amount AND a status</div><div class="task-sub">Missing amount = invisible to pipeline. Missing status = Klicktiv can't track conversion. Both required, every estimate.</div></div><span class="task-badge b-red">Rule</span></div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="klicktiv"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Parts costs must be entered before tech pay is calculated</div><div class="task-sub">Formula: Net = (Gross − Parts) × company %. If parts are missing, net is overstated and the tech payout will be wrong.</div></div><span class="task-badge b-red">Rule</span></div>
+  </div>
+  <div class="group">
+    <div class="group-title">Commission Rates — Verify Before Every Payout</div>
+    <div class="table-wrap">
+      <table class="rt">
+        <thead><tr><th>Tech / Team</th><th>Split</th><th>Co Net %</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td class="tc">Aviran</td><td class="tm">40% tech / 60% co</td><td class="tm" style="color:var(--green)">60%</td><td class="tn">Highest earner — double-check every payout</td></tr>
+          <tr class="wr"><td class="tc">Tamir</td><td class="tm">25% tech / 75% co</td><td class="tm" style="color:var(--green)">75%</td><td class="tn" style="color:var(--amber)">⚠ Changed from 50/50 in April — confirm current rate with Martin</td></tr>
+          <tr><td class="tc">Shalom</td><td class="tm">25% tech / 75% co</td><td class="tm" style="color:var(--green)">75%</td><td class="tn">Confirm still current</td></tr>
+          <tr><td class="tc">Sub</td><td class="tm">50% / 50%</td><td class="tm">50%</td><td class="tn">—</td></tr>
+          <tr><td class="tc">3 Bros - SUB</td><td class="tm">50% / 50%</td><td class="tm">50%</td><td class="tn">—</td></tr>
+          <tr><td class="tc">Sub - DAD</td><td class="tm">50% / 50%</td><td class="tm">50%</td><td class="tn">—</td></tr>
+          <tr><td class="tc">3 Bros - DAD</td><td class="tm">50% / 50%</td><td class="tm">50%</td><td class="tn" style="color:var(--red)">NOT 75% — common error</td></tr>
+          <tr><td class="tc">Yotam</td><td class="tm">50% / 50%</td><td class="tm">50%</td><td class="tn">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="group">
+    <div class="group-title">Location Tagging</div>
+    <div class="task info" onclick="toggle(this)" data-tab="klicktiv"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Tampa area</div><div class="task-sub">Tampa · Brandon · Riverview · Seffner · Land O' Lakes · Lutz · Wesley Chapel · Wimauma · Lithia · Plant City · Zephyrhills · Odessa · Valrico · Lakeland · Polk City · Apollo Beach</div></div><span class="task-badge b-pipe">Tag</span></div>
+    <div class="task info" onclick="toggle(this)" data-tab="klicktiv"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">St. Pete area</div><div class="task-sub">St. Petersburg · Clearwater · Dunedin · Palm Harbor · Largo · Pinellas Park · Seminole · Safety Harbor · Holiday · Hudson · New Port Richey · Port Richey</div></div><span class="task-badge b-pipe">Tag</span></div>
+    <div class="task info" onclick="toggle(this)" data-tab="klicktiv"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Sarasota area</div><div class="task-sub">Sarasota · Venice · Nokomis · Bradenton · North Port · Englewood · Palmetto · Lakewood Ranch</div></div><span class="task-badge b-pipe">Tag</span></div>
+    <div class="task info" onclick="toggle(this)" data-tab="klicktiv"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Naples area</div><div class="task-sub">Naples · Fort Myers · Cape Coral · Marco Island · Port Charlotte · Punta Gorda · Estero · Bonita Springs</div></div><span class="task-badge b-pipe">Tag</span></div>
+    <div class="task info" onclick="toggle(this)" data-tab="klicktiv"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Miami / Palm Beach area</div><div class="task-sub">Miami · Weston · Boynton Beach · Palm Beach Gardens · Tamarac · Boca Raton · Fort Lauderdale · Coral Springs</div></div><span class="task-badge b-pipe">Tag</span></div>
+    <div class="task info" onclick="toggle(this)" data-tab="klicktiv"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Other areas</div><div class="task-sub">Orlando · Kissimmee · Winter Garden · Windermere · DeBary · Longwood · Ocala · Brooksville · Spring Hill · Hudson · Lake Suzy</div></div><span class="task-badge b-gray">Tag</span></div>
+  </div>
+</div>
+
+<!-- ══ CALC REFERENCE ══ -->
+<div class="panel" id="panel-calc">
+  <div class="sec-hdr">
+    <div class="sec-hdr-l">
+      <div class="sec-icon" style="background:rgba(212,147,58,.1);border-color:rgba(212,147,58,.3)">🧮</div>
+      <div><div class="sec-title" style="color:var(--amber)">Calc Reference</div><div class="sec-count" id="sc-calc">0 of 0 complete</div></div>
+    </div>
+    <button class="reset-btn" onclick="resetTab('calc')">↺ Reset</button>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="pt-calc" style="width:0%;background:var(--amber)"></div></div>
+  <div class="group">
+    <div class="group-title">The Three Definitions</div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="calc"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">GROSS = the full amount on the customer's invoice</div><div class="task-sub">Before any deductions. Not the tech's share. Not the company share. Not the net. If the customer paid $1,799, gross = $1,799.</div></div><span class="task-badge b-red">Definition 1</span></div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="calc"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">NET AFTER PARTS = Gross minus the cost of materials used</div><div class="task-sub">If no parts → Net After Parts = Gross. If parts were used → subtract them first. Example: $1,799 gross − $50 parts = $1,749 net after parts.</div></div><span class="task-badge b-red">Definition 2</span></div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="calc"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">COMPANY NET = Net After Parts × the company's percentage</div><div class="task-sub">The split always applies to Net After Parts, not Gross. Example (50%): $1,749 × 50% = $874.50. Example (75% co): $396 × 75% = $297. Example (60% co): $2,000 × 60% = $1,200.</div></div><span class="task-badge b-red">Definition 3</span></div>
+  </div>
+  <div class="group">
+    <div class="group-title">Step-By-Step Formula</div>
+    <div class="fbox">
+      <div class="ft">How to calculate company net for any job</div>
+      <div class="fl"><span class="fl-lbl">Step 1</span><span class="fl-eq">Net After Parts  =  Gross − Parts Cost</span><span class="fl-ex">$1,799 − $50 = $1,749</span></div>
+      <div class="fl"><span class="fl-lbl">50% co split</span><span class="fl-eq">Co Net  =  Net After Parts × 0.50</span><span class="fl-ex">$1,749 × 0.50 = $874.50</span></div>
+      <div class="fl"><span class="fl-lbl">75% co split</span><span class="fl-eq">Co Net  =  Net After Parts × 0.75</span><span class="fl-ex">$396 × 0.75 = $297.00</span></div>
+      <div class="fl"><span class="fl-lbl">60% co split</span><span class="fl-eq">Co Net  =  Net After Parts × 0.60</span><span class="fl-ex">$2,000 × 0.60 = $1,200</span></div>
+    </div>
+  </div>
+  <div class="group">
+    <div class="group-title">Common Errors — Check Every Report</div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="calc"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Sub / 3 Bros gross and net not swapped</div><div class="task-sub">Most frequent error: entering $874.50 (the 50% split) as the gross instead of $1,799. Gross in, net is calculated out — never reverse this.</div></div><span class="task-badge b-red">Check</span></div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="calc"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">All of each tech's jobs included — not just one</div><div class="task-sub">When a tech has multiple jobs in a day, every job must be summed. Missing even one job understates the daily revenue.</div></div><span class="task-badge b-red">Check</span></div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="calc"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">3 Bros - DAD is 50% rate, not 75%</div><div class="task-sub">3 Bros - DAD is always 50/50. Only Tamir and Shalom are on 75% company. Never apply 75% to any Bros or DAD team member.</div></div><span class="task-badge b-red">Check</span></div>
+    <div class="task warn" onclick="toggle(this)" data-tab="calc"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">3 Bros - SUB gross includes all jobs for the day</div><div class="task-sub">Count jobs in Klicktiv and confirm all are included. A single missed job can leave the daily gross short by hundreds of dollars.</div></div><span class="task-badge b-amb">Check</span></div>
+    <div class="task warn" onclick="toggle(this)" data-tab="calc"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">No duplicate jobs from the same address</div><div class="task-sub">If the same address appears under two techs, confirm with Martin before counting it twice. Split-commission jobs sometimes appear twice in Klicktiv.</div></div><span class="task-badge b-amb">Check</span></div>
+    <div class="task info" onclick="toggle(this)" data-tab="calc"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Daily Gross & Net sheet — correct column assignment</div><div class="task-sub">Col A–C: Sub (50%) · Col E–G: 3 Bros SUB + DAD combined (50%) · Col I–K: Tamir (75% co). Enter date, gross, and calculated net in the right group.</div></div><span class="task-badge b-pipe">Reference</span></div>
+  </div>
+</div>
+
+<!-- ══ WEEKLY ══ -->
+<div class="panel" id="panel-weekly">
+  <div class="sec-hdr">
+    <div class="sec-hdr-l">
+      <div class="sec-icon" style="background:rgba(58,175,169,.1);border-color:rgba(58,175,169,.3)">📅</div>
+      <div><div class="sec-title" style="color:var(--green)">Weekly</div><div class="sec-count" id="sc-weekly">0 of 0 complete</div></div>
+    </div>
+    <button class="reset-btn" onclick="resetTab('weekly')">↺ Reset</button>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="pt-weekly" style="width:0%;background:var(--green)"></div></div>
+  <div class="group">
+    <div class="group-title">Every Monday</div>
+    <div class="task info" onclick="toggle(this)" data-tab="weekly"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Run the weekly location report</div><div class="task-sub">Group last week's jobs by: Tampa · St. Pete · Sarasota · Naples · Miami-Palm Beach · Other. For each area: jobs done, gross, parts, net, tech pay. Send to Martin.</div></div><span class="task-badge b-pipe">Monday</span></div>
+    <div class="task warn" onclick="toggle(this)" data-tab="weekly"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Review all PENDING estimates older than 7 days</div><div class="task-sub">Follow-up call required or change to LOST. Stale estimates inflate the Klicktiv pipeline and mislead revenue planning.</div></div><span class="task-badge b-amb">Monday</span></div>
+    <div class="task info" onclick="toggle(this)" data-tab="weekly"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Prepare weekly tech payout summaries for Martin</div><div class="task-sub">Per tech: jobs done · total gross · parts deducted · net after parts · rate · payout amount · cash on hand. Martin must approve before any payment is made.</div></div><span class="task-badge b-pipe">Monday</span></div>
+    <div class="task warn" onclick="toggle(this)" data-tab="weekly"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Spot-check 5 prior-week P&L entries against Klicktiv</div><div class="task-sub">Pick 5 random jobs. Open the Klicktiv PDF for that day. Confirm gross, parts, net, and tech pay all match the Excel P&L exactly. Flag any discrepancy to Martin.</div></div><span class="task-badge b-amb">Audit</span></div>
+    <div class="task info" onclick="toggle(this)" data-tab="weekly"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Check review coverage rate for the week</div><div class="task-sub">Jobs done vs reviews collected. If below 20%, escalate to Martin and remind all techs at the Monday morning briefing.</div></div><span class="task-badge b-pipe">Monday</span></div>
+  </div>
+  <div class="group">
+    <div class="group-title">Every Friday</div>
+    <div class="task warn" onclick="toggle(this)" data-tab="weekly"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Reconcile all PARTIAL jobs from the week</div><div class="task-sub">Any job still PARTIAL on Friday must have a confirmed completion date before the weekend. No partials without a close date.</div></div><span class="task-badge b-amb">Friday</span></div>
+    <div class="task info" onclick="toggle(this)" data-tab="weekly"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Confirm next week's booked jobs are in Klicktiv</div><div class="task-sub">Each booked job: address + tech assigned + estimated value. Deposits already collected must be logged.</div></div><span class="task-badge b-gray">Prep</span></div>
+    <div class="task info" onclick="toggle(this)" data-tab="weekly"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Send the weekly summary to Martin</div><div class="task-sub">Weekly gross · jobs done · company net · best area · review count · open pipeline · unresolved flags from the week.</div></div><span class="task-badge b-pipe">Friday</span></div>
+  </div>
+</div>
+
+<!-- ══ OPEN ISSUES ══ -->
+<div class="panel" id="panel-flags">
+  <div class="sec-hdr">
+    <div class="sec-hdr-l">
+      <div class="sec-icon" style="background:rgba(224,85,85,.1);border-color:rgba(224,85,85,.3)">🚨</div>
+      <div><div class="sec-title" style="color:var(--red)">Open Issues</div><div class="sec-count" id="sc-flags">0 of 0 resolved</div></div>
+    </div>
+    <button class="reset-btn" onclick="resetTab('flags')">↺ Reset</button>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="pt-flags" style="width:0%;background:var(--red)"></div></div>
+  <div class="group">
+    <div class="group-title">Backlog — Must Be Resolved</div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="flags"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Enter Jan 10 – present into the Daily P&L</div><div class="task-sub">P&L stops at Jan 9, 2026. 700+ completed jobs are missing. Work forward from Jan 10 using daily Klicktiv PDFs as the source, one day at a time.</div></div><span class="task-badge b-red">Backlog</span></div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="flags"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Add a status to all 12 carry-over estimates (Dec/Jan)</div><div class="task-sub">Every estimate in the Daily Estimates sheet has no status. Each needs PENDING · WON · LOST · or BOOKED. These are distorting the Klicktiv pipeline total.</div></div><span class="task-badge b-red">Urgent</span></div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="flags"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Add dollar amount: 99 Spring Ave, Anna Maria (Shalom, Jan 5)</div><div class="task-sub">This estimate has no dollar amount. Ask Shalom what price was quoted and enter it. No amount = invisible to Klicktiv.</div></div><span class="task-badge b-red">Urgent</span></div>
+    <div class="task urgent" onclick="toggle(this)" data-tab="flags"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Move 16 estimates from the P&L sheet → Daily Estimates sheet</div><div class="task-sub">16 rows with ESTIMATE status are inside the Daily P&L. Must be moved to Daily Estimates so Klicktiv includes them in pipeline tracking.</div></div><span class="task-badge b-red">Housekeeping</span></div>
+  </div>
+  <div class="group">
+    <div class="group-title">Pending Jobs — Confirm Completion</div>
+    <div class="task warn" onclick="toggle(this)" data-tab="flags"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Close: 8857 CypressHammock Dr (Yotam, Jan 5)</div><div class="task-sub">Total $1,620 · Deposit $300 · Status still PENDING. Confirm with Yotam — if completed, update to DONE and enter $1,620 total.</div></div><span class="task-badge b-amb">Pending</span></div>
+    <div class="task warn" onclick="toggle(this)" data-tab="flags"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Close: 12833 Poinsettia Ave, Seminole (Sub, Jan 7)</div><div class="task-sub">Total $6,100 · Deposit $3,050 · Status still PENDING. Confirm with Sub team — if completed, DONE + $6,100 total.</div></div><span class="task-badge b-amb">Pending</span></div>
+    <div class="task warn" onclick="toggle(this)" data-tab="flags"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Resolve duplicate address — 6720 Pine Springs Dr, Wesley Chapel</div><div class="task-sub">Appeared under both Tamir (25%) and 3 Bros-DAD (50%) on May 20. Confirm with Martin: one job with a split, or two separate jobs? Do not count twice until resolved.</div></div><span class="task-badge b-amb">Verify</span></div>
+  </div>
+  <div class="group">
+    <div class="group-title">Confirm with Martin</div>
+    <div class="task info" onclick="toggle(this)" data-tab="flags"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Confirm Tamir's current commission rate</div><div class="task-sub">April 2026: Tamir was 50/50. May 2026 shows 75% Co / 25% Tech. Clarify which rate applies going forward so all payouts are calculated correctly.</div></div><span class="task-badge b-pipe">Verify</span></div>
+    <div class="task ok" onclick="toggle(this)" data-tab="flags"><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-text">Set up daily estimate reporting process with all techs</div><div class="task-sub">Every tech must report estimates the same day. Create a simple WhatsApp template: address + service description + dollar amount. This keeps the Klicktiv pipeline accurate in real time.</div></div><span class="task-badge b-grn">Process</span></div>
+  </div>
+</div>
+
+</main>
+
+<!-- Right Rail -->
+<aside class="rail">
+  <div class="rail-sec">
+    <div class="rail-title">All Sections</div>
+    <div id="rail-bars"></div>
+  </div>
+  <div class="divider"></div>
+  <div class="rail-sec">
+    <div class="rail-title">Urgent Remaining</div>
+    <div id="rail-urgent"></div>
+  </div>
+  <div class="divider"></div>
+  <div class="rail-sec">
+    <div class="rail-title">Open Issues</div>
+    <div id="rail-issues-num" class="ic" style="color:var(--red)">—</div>
+    <div class="il" id="rail-issues-lbl">unresolved</div>
+  </div>
+</aside>
+
+</div><!-- /layout -->
+
+<script>
+const TABS=['morning','eod','klicktiv','calc','weekly','flags'];
+const COLORS={morning:'var(--amber)',eod:'var(--pipe)',klicktiv:'var(--pipe)',calc:'var(--amber)',weekly:'var(--green)',flags:'var(--red)'};
+const NAMES={morning:'Morning Open',eod:'End of Day',klicktiv:'Klicktiv Rules',calc:'Calc Ref',weekly:'Weekly',flags:'Open Issues'};
+
+document.getElementById('today-date').textContent=
+  new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+
+function items(t){return[...document.querySelectorAll(`#panel-${t} .task`)];}
+function progress(t){const a=items(t),d=a.filter(i=>i.classList.contains('done')).length;return{done:d,total:a.length,pct:a.length?Math.round(d/a.length*100):0};}
+
+function updateAll(){
+  let td=0,ta=0;
+  TABS.forEach(t=>{
+    const{done,total,pct}=progress(t);td+=done;ta+=total;
+    document.getElementById(`nb-${t}`).style.width=pct+'%';
+    document.getElementById(`np-${t}`).textContent=done+'/'+total;
+    const sc=document.getElementById(`sc-${t}`);
+    if(sc)sc.textContent=(t==='flags'?done+' of '+total+' resolved':done+' of '+total+' complete');
+    const pt=document.getElementById(`pt-${t}`);
+    if(pt)pt.style.width=pct+'%';
+  });
+  const op=ta?Math.round(td/ta*100):0;
+  document.getElementById('overall-bar').style.width=op+'%';
+  document.getElementById('overall-txt').textContent=op+'%';
+  const fp=progress('flags'),left=fp.total-fp.done,b=document.getElementById('flags-badge');
+  b.textContent=left;b.style.display=left>0?'flex':'none';
+  updateRail();
+}
+
+function updateRail(){
+  let bHTML='';
+  TABS.forEach(t=>{const{done,total,pct}=progress(t);bHTML+=`<div class="mb"><div class="mb-lbl"><span>${NAMES[t]}</span><span>${pct}%</span></div><div class="mt"><div class="mf" style="width:${pct}%;background:${COLORS[t]}"></div></div></div>`;});
+  document.getElementById('rail-bars').innerHTML=bHTML;
+  const urg=[...document.querySelectorAll('.task.urgent:not(.done)')];
+  document.getElementById('rail-urgent').innerHTML=urg.length
+    ?urg.slice(0,5).map(i=>`<div class="ui">${i.querySelector('.task-text').textContent.slice(0,50)}…</div>`).join('')+(urg.length>5?`<div class="ui">+${urg.length-5} more</div>`:'')
+    :'<div class="un">✓ All clear</div>';
+  const{done,total}=progress('flags'),left=total-done;
+  document.getElementById('rail-issues-num').textContent=left;
+  document.getElementById('rail-issues-num').style.color=left===0?'var(--green)':'var(--red)';
+  document.getElementById('rail-issues-lbl').textContent='unresolved of '+total;
+}
+
+function toggle(el){el.classList.toggle('done');updateAll();}
+
+function switchTab(t,n){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+  document.getElementById('panel-'+t).classList.add('active');
+  (n||document.querySelector(`[data-tab="${t}"]`)).classList.add('active');
+  updateAll();
+}
+
+function resetTab(t){items(t).forEach(i=>i.classList.remove('done'));updateAll();}
+updateAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+{
+  "hero": {
+    "name": "Ducts All Done",
+    "legalName": "Ducts All Done LLC",
+    "subtitle": "Clean Air Begins With Clear Ducts",
+    "location": "Tampa, FL",
+    "address": "13542 N Florida Ave, Ste 211B\nTampa, FL 33613-3279",
+    "status": "Active LLC"
+  },
+  "alerts": [
+    {
+      "id": "alert-1",
+      "type": "destructive",
+      "title": "Action required",
+      "message": "AC Contractor License CAC057113 expires Aug 31, 2026 (~89 days). Workers Comp TWC4712196 expires Nov 18, 2026 (~168 days). Both need renewal follow-up."
+    }
+  ],
+  "pulseGrid": [
+    {
+      "label": "General Liability",
+      "value": "$2M",
+      "subtext": "Active · Mar 2027",
+      "status": "ok"
+    },
+    {
+      "label": "Workers Comp",
+      "value": "$1M",
+      "subtext": "Exp. Nov 2026",
+      "status": "warn"
+    },
+    {
+      "label": "AC License",
+      "value": "CAC",
+      "subtext": "Exp. Aug 2026",
+      "status": "bad"
+    },
+    {
+      "label": "Tax Form",
+      "value": "W-9",
+      "subtext": "Verified Jan 2022",
+      "status": "ok"
+    }
+  ],
+  "company": {
+    "title": "Company",
+    "data": [
+      { "label": "Legal name", "value": "Ducts All Done LLC", "mono": true },
+      { "label": "Entity type", "value": "Limited Liability Company" },
+      { "label": "Business address", "value": "13542 N Florida Ave, Ste 211B · Tampa, FL 33613-3279" },
+      { "label": "Phone", "value": "813-923-2906", "link": "tel:8139232906" },
+      { "label": "Email", "value": "office@ductsalldone.com", "link": "mailto:office@ductsalldone.com" },
+      { "label": "Website", "value": "ductsalldone.com ↗", "link": "https://ductsalldone.com/" },
+      { "label": "License holder", "value": "Scott M. Galvin" },
+      { "label": "Trade", "value": "Class A Air Conditioning Contractor" },
+      { "label": "State", "value": "Florida" }
+    ]
+  },
+  "license": {
+    "title": "FL Contractor License",
+    "subtitle": "CAC057113 — Certified Air Conditioning Contractor",
+    "badge": { "text": "Expires Aug 2026", "status": "bad" },
+    "data": [
+      { "label": "License number", "value": "CAC057113", "mono": true },
+      { "label": "Classification", "value": "Class A — Certified AC Contractor" },
+      { "label": "Statute", "value": "Chapter 489, Florida Statutes" },
+      { "label": "Issuing authority", "value": "FL DBPR · Construction Industry Licensing Board" },
+      { "label": "Issued", "value": "July 2, 2024" },
+      { "label": "Expires", "value": "August 31, 2026", "status": "bad" },
+      { "label": "Verify", "value": "MyFloridaLicense.com ↗", "link": "https://www.myfloridalicense.com" }
+    ]
+  },
+  "insuranceGL": {
+    "title": "General Liability",
+    "badge": { "text": "Active", "status": "ok" },
+    "data": [
+      { "label": "Insurer", "value": "Nationwide Insurance Group" },
+      { "label": "Policy", "value": "ACPCG013231292519", "mono": true },
+      { "label": "Effective", "value": "03/08/2026" },
+      { "label": "Expires", "value": "03/08/2027", "status": "ok" },
+      { "label": "Each occurrence", "value": "$1,000,000" },
+      { "label": "General aggregate", "value": "$2,000,000" },
+      { "label": "Products / comp-op", "value": "$2,000,000" },
+      { "label": "Personal & adv injury", "value": "$1,000,000" },
+      { "label": "Rented premises", "value": "$100,000" },
+      { "label": "Med exp", "value": "$5,000" }
+    ]
+  },
+  "insuranceWC": {
+    "title": "Workers Compensation",
+    "badge": { "text": "Exp. Nov 2026", "status": "warn" },
+    "data": [
+      { "label": "Insurer", "value": "Technology Insurance Co." },
+      { "label": "Policy", "value": "TWC4712196", "mono": true },
+      { "label": "Effective", "value": "11/18/2025" },
+      { "label": "Expires", "value": "11/18/2026", "status": "warn" },
+      { "label": "EL each accident", "value": "$1,000,000" },
+      { "label": "EL disease / employee", "value": "$1,000,000" },
+      { "label": "EL disease / policy", "value": "$1,000,000" },
+      { "label": "COI cert #", "value": "DUCT26031812191783", "mono": true },
+      { "label": "COI issued", "value": "03/18/2026" }
+    ]
+  },
+  "agent": {
+    "title": "Insurance Agent",
+    "data": [
+      { "label": "Agency", "value": "Kelly White & Associates Insurance, LLC" },
+      { "label": "Contact", "value": "Crystal Pounders" },
+      { "label": "Phone", "value": "904-880-8881", "link": "tel:9048808881" },
+      { "label": "Email", "value": "crystal@kwhiteinsurance.com", "link": "mailto:crystal@kwhiteinsurance.com" },
+      { "label": "Address", "value": "1622 Hickman Road · Jacksonville, FL 32216" }
+    ]
+  },
+  "tax": {
+    "title": "Tax Documentation",
+    "data": [
+      { "label": "Form on file", "value": "IRS Form W-9 (Rev. October 2018)" },
+      { "label": "Verified", "value": "January 27, 2022" },
+      { "label": "Purpose", "value": "TIN certification for IRS information return reporting" },
+      { "label": "TIN / EIN", "value": "Held securely — not shown here", "italic": true }
+    ]
+  },
+  "docs": [
+    {
+      "name": "W-9",
+      "meta": "Ducts All Done LLC · Verified Jan 2022",
+      "link": "https://drive.google.com/file/d/1FA5Dk7RNggUanpG90K3XrPm4KqpMQOIq/view?usp=sharing",
+      "icon": "FileText"
+    },
+    {
+      "name": "Certificate of Insurance",
+      "meta": "COI · Issued Mar 18, 2026",
+      "link": "https://drive.google.com/file/d/1oEcLQ1ODYmKSILZXUqgkhoN5ZvChEYcC/view?usp=sharing",
+      "icon": "Shield"
+    },
+    {
+      "name": "AC Contractor License",
+      "meta": "CAC057113 · Exp. Aug 31, 2026",
+      "link": "https://drive.google.com/file/d/1Wv_TLQFW6T10LE8aphyHOtFweuZP13I-/view?usp=sharing",
+      "icon": "Award"
+    }
+  ],
+  "renewals": [
+    {
+      "name": "AC Contractor License",
+      "detail": "FL DBPR · CAC057113 · Scott M. Galvin",
+      "date": "Aug 31, 2026",
+      "days": "~89 days — renew now",
+      "status": "bad"
+    },
+    {
+      "name": "Workers Compensation",
+      "detail": "Technology Insurance · TWC4712196",
+      "date": "Nov 18, 2026",
+      "days": "~168 days — monitor",
+      "status": "warn"
+    },
+    {
+      "name": "General Liability",
+      "detail": "Nationwide Insurance · ACPCG013231292519",
+      "date": "Mar 8, 2027",
+      "days": "~278 days — good",
+      "status": "ok"
+    }
+  ]
+}
