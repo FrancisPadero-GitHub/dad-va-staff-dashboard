@@ -1,8 +1,8 @@
 import data from "@/data/company-info.json";
 import { FileText, Shield, Award, ExternalLink } from "lucide-react";
-import { cn } from "@/lib/utils";
 
-const ICONS: Record<string, any> = {
+
+const ICONS: Record<string, React.ElementType> = {
   FileText,
   Shield,
   Award,

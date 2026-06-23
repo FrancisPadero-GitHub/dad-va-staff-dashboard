@@ -32,7 +32,7 @@ export function LoginForm() {
         setTimeout(() => setShake(false), 400);
         setPassword("");
       }
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred.");
     } finally {
       setLoading(false);

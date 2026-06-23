@@ -12,6 +12,7 @@ export function Topbar() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDateStr(
       new Date().toLocaleDateString("en-US", {
         weekday: "short",
@@ -37,6 +38,7 @@ export function Topbar() {
       });
     });
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setProgress(totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100));
   }, [checkedItems]);
 

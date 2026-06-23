@@ -7,7 +7,7 @@ import { Sun, Moon, ClipboardList, Calculator, Calendar, AlertTriangle, Building
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const ICON_MAP: Record<string, any> = {
+const ICON_MAP: Record<string, React.ElementType> = {
   Sun,
   Moon,
   ClipboardList,
@@ -52,7 +52,7 @@ export function Sidebar() {
         <Link
           href="/info"
           className={cn(
-            "group relative flex items-center gap-3 rounded-md px-2 py-2 text-left transition-all hover:bg-accent/50 mb-4",
+            "group relative flex items-center gap-3 rounded-md px-2 py-2 text-left transition-all hover:bg-accent/50 mb-1",
             pathname === "/info" && "bg-accent/80 border-border border"
           )}
         >
@@ -70,6 +70,30 @@ export function Sidebar() {
               )}
             >
               Overview Info
+            </div>
+          </div>
+        </Link>
+        <Link
+          href="/daily-calls"
+          className={cn(
+            "group relative flex items-center gap-3 rounded-md px-2 py-2 text-left transition-all hover:bg-accent/50 mb-4",
+            pathname === "/daily-calls" && "bg-accent/80 border-border border"
+          )}
+        >
+          {pathname === "/daily-calls" && (
+            <div className="absolute left-0 top-1/2 h-6 -translate-y-1/2 w-1 rounded-r-full bg-primary" />
+          )}
+          <div className={cn("flex w-6 shrink-0 items-center justify-center transition-colors md:w-6", pathname === "/daily-calls" ? "text-primary" : "text-muted-foreground")}>
+            <ClipboardList className="h-4 w-4" />
+          </div>
+          <div className="flex flex-1 flex-col overflow-hidden hidden md:flex">
+            <div
+              className={cn(
+                "truncate text-sm font-bold uppercase tracking-wide transition-colors",
+                pathname === "/daily-calls" ? "text-primary" : "text-foreground"
+              )}
+            >
+              Daily Sheet
             </div>
           </div>
         </Link>
