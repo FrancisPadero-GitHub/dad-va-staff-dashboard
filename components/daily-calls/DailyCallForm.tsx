@@ -2,9 +2,10 @@
 
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { PostgrestError } from "@supabase/supabase-js"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { supabase } from "@/lib/supabase"
+import { useAddDailyCall } from "@/hooks/useDailyCalls"
 import {
   Dialog,
   DialogContent,
@@ -36,10 +37,11 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>
 
-export function DailyCallForm({ onSuccess }: { onSuccess: () => void }) {
+export function DailyCallForm() {
   const [open, setOpen] = useState(false)
   const [errorMsg, setErrorMsg] = useState("")
-  const [loading, setLoading] = useState(false)
+
+  const { mutateAsync: addCall, isPending: loading } = useAddDailyCall()
 
   const {
     register,
@@ -63,30 +65,25 @@ export function DailyCallForm({ onSuccess }: { onSuccess: () => void }) {
   const categoryValue = watch("category")
 
   async function onSubmit(values: FormValues) {
-    setLoading(true)
     setErrorMsg("")
 
-    const { error } = await supabase.from("daily_calls").insert([values])
-
-    if (error) {
+    try {
+      await addCall(values)
+      setOpen(false)
+      reset({
+        ...values,
+        workiz_id: "",
+        job_description: "",
+        customer_phone: "",
+      })
+    } catch (err) {
+      const error = err as PostgrestError;
       if (error.code === "23505") {
         setErrorMsg("This customer has already been logged today.")
       } else {
         setErrorMsg(error.message)
       }
-      setLoading(false)
-      return
     }
-
-    setLoading(false)
-    setOpen(false)
-    reset({
-      ...values,
-      workiz_id: "",
-      job_description: "",
-      customer_phone: "",
-    })
-    onSuccess()
   }
 
   return (
@@ -159,7 +156,7 @@ export function DailyCallForm({ onSuccess }: { onSuccess: () => void }) {
               <Select
                 value={categoryValue}
                 onValueChange={(value: "Relevant" | "Spam" | "Not Relevant") =>
-                  setValue("category", value)
+                  setValue("category", value, { shouldDirty: true })
                 }
               >
                 <SelectTrigger>

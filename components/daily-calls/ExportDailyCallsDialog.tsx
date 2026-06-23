@@ -5,6 +5,7 @@ import { format, subDays } from "date-fns"
 import jsPDF from "jspdf"
 import autoTable from "jspdf-autotable"
 import { supabase } from "@/lib/supabase"
+import { DailyCall } from "./DailyCallsTable"
 import {
   Dialog,
   DialogContent,
@@ -69,7 +70,7 @@ export function ExportDailyCallsDialog() {
     setOpen(false)
   }
 
-  const generatePdf = (calls: any[]) => {
+  const generatePdf = (calls: DailyCall[]) => {
     const doc = new jsPDF()
 
     // Header styling matching project themes

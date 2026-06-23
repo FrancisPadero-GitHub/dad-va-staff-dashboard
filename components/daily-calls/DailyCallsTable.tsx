@@ -1,7 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback, useMemo } from "react"
-import { supabase } from "@/lib/supabase"
+import { useMemo } from "react"
 import { AgGridReact } from "ag-grid-react"
 import {
   AllCommunityModule,
@@ -13,6 +12,8 @@ import {
 
 import { Badge } from "@/components/ui/badge"
 import { useDailyCallsStore } from "@/store/useDailyCallsStore"
+import { useDailyCalls } from "@/hooks/useDailyCalls"
+import { Skeleton } from "@/components/ui/skeleton"
 
 // Register all community features
 ModuleRegistry.registerModules([AllCommunityModule])
@@ -41,36 +42,9 @@ export type DailyCall = {
   customer_phone: string
 }
 
-export function DailyCallsTable({
-  refreshTrigger,
-}: {
-  refreshTrigger: number
-}) {
-  const [calls, setCalls] = useState<DailyCall[]>([])
-  const [loading, setLoading] = useState(true)
-
+export function DailyCallsTable() {
   const { setSelectedCall, setEditModalOpen } = useDailyCallsStore()
-
-  const fetchCalls = useCallback(async () => {
-    setLoading(true)
-
-    // Fetch up to 500 recent calls to let AG Grid handle filtering/pagination client-side
-    const { data, error } = await supabase
-      .from("daily_calls")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(500)
-
-    if (!error && data) {
-      setCalls(data as DailyCall[])
-    }
-    setLoading(false)
-  }, [])
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchCalls()
-  }, [fetchCalls, refreshTrigger])
+  const { data: calls = [], isLoading, isFetching, isError } = useDailyCalls()
 
   const colDefs = useMemo<ColDef<DailyCall>[]>(
     () => [
@@ -149,8 +123,49 @@ export function DailyCallsTable({
     }
   }, [])
 
+  if (isLoading) {
+    return (
+      <div className="space-y-2">
+        <div className="flex justify-end min-h-[24px]"></div>
+        <div
+          className="w-full rounded-md border p-4 space-y-4 bg-card"
+          style={{ height: "75vh", maxHeight: "600px" }}
+        >
+          {Array.from({ length: 12 }).map((_, i) => (
+            <Skeleton key={i} className="h-10 w-full" />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (isError) {
+    return (
+      <div className="space-y-2">
+        <div className="flex justify-end min-h-[24px]"></div>
+        <div
+          className="flex w-full items-center justify-center overflow-hidden rounded-md border bg-destructive/10 p-4 text-destructive"
+          style={{ height: "75vh", maxHeight: "600px" }}
+        >
+          Failed to load daily calls. Please try again later.
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
+      <div className="flex justify-end min-h-[24px]">
+        {isFetching && !isLoading && (
+          <span className="flex items-center gap-2 text-xs text-muted-foreground animate-pulse">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-blue-500"></span>
+            </span>
+            Updating...
+          </span>
+        )}
+      </div>
       <div
         className="w-full overflow-hidden rounded-md border"
         style={{ height: "75vh", maxHeight: "600px" }}
@@ -170,9 +185,9 @@ export function DailyCallsTable({
             }
           }}
           rowSelection="single"
-          loading={loading}
+          loading={isFetching}
           overlayLoadingTemplate={
-            '<span class="ag-overlay-loading-center">Loading calls...</span>'
+            '<span class="ag-overlay-loading-center">Refreshing...</span>'
           }
           overlayNoRowsTemplate={
             '<span class="ag-overlay-no-rows-center">No calls logged yet.</span>'

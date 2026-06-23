@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Topbar } from "@/components/dashboard/Topbar";
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import { DailyCallsTable } from "@/components/daily-calls/DailyCallsTable";
@@ -9,11 +8,6 @@ import { EditDailyCallForm } from "@/components/daily-calls/EditDailyCallForm";
 import { ExportDailyCallsDialog } from "@/components/daily-calls/ExportDailyCallsDialog";
 
 export default function DailyCallsPage() {
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
-
-  const handleSuccess = () => {
-    setRefreshTrigger((prev) => prev + 1);
-  };
 
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-background">
@@ -33,12 +27,12 @@ export default function DailyCallsPage() {
               </div>
               <div className="flex items-center gap-2">
                 <ExportDailyCallsDialog />
-                <DailyCallForm onSuccess={handleSuccess} />
+                <DailyCallForm />
               </div>
             </div>
 
-            <DailyCallsTable refreshTrigger={refreshTrigger} />
-            <EditDailyCallForm onSuccess={handleSuccess} />
+            <DailyCallsTable />
+            <EditDailyCallForm />
           </div>
         </main>
       </div>

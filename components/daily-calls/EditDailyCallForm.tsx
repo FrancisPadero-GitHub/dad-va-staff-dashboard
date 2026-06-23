@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import { PostgrestError } from "@supabase/supabase-js"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { supabase } from "@/lib/supabase"
+import { useUpdateDailyCall, useDeleteDailyCall } from "@/hooks/useDailyCalls"
 import { useDailyCallsStore } from "@/store/useDailyCallsStore"
 import {
   Dialog,
@@ -24,6 +25,17 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 const formSchema = z.object({
   call_date: z.string().min(1, "Date is required"),
@@ -35,11 +47,14 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>
 
-export function EditDailyCallForm({ onSuccess }: { onSuccess: () => void }) {
+export function EditDailyCallForm() {
   const { selectedCall, isEditModalOpen, setEditModalOpen, setSelectedCall } =
     useDailyCallsStore()
   const [errorMsg, setErrorMsg] = useState("")
-  const [loading, setLoading] = useState(false)
+
+  const { mutateAsync: updateCall, isPending: isUpdating } = useUpdateDailyCall()
+  const { mutateAsync: deleteCall, isPending: isDeleting } = useDeleteDailyCall()
+  const loading = isUpdating || isDeleting
 
   const {
     register,
@@ -47,7 +62,7 @@ export function EditDailyCallForm({ onSuccess }: { onSuccess: () => void }) {
     setValue,
     watch,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -85,29 +100,34 @@ export function EditDailyCallForm({ onSuccess }: { onSuccess: () => void }) {
 
   async function onSubmit(values: FormValues) {
     if (!selectedCall) return
-
-    setLoading(true)
     setErrorMsg("")
 
-    const { error } = await supabase
-      .from("daily_calls")
-      .update(values)
-      .eq("id", selectedCall.id)
-
-    if (error) {
+    try {
+      await updateCall({ id: selectedCall.id, updates: values })
+      setEditModalOpen(false)
+      setSelectedCall(null)
+    } catch (err) {
+      const error = err as PostgrestError;
       if (error.code === "23505") {
         setErrorMsg("This customer has already been logged today.")
       } else {
         setErrorMsg(error.message)
       }
-      setLoading(false)
-      return
     }
+  }
 
-    setLoading(false)
-    setEditModalOpen(false)
-    setSelectedCall(null)
-    onSuccess()
+  async function handleDelete() {
+    if (!selectedCall) return
+    setErrorMsg("")
+
+    try {
+      await deleteCall(selectedCall.id)
+      setEditModalOpen(false)
+      setSelectedCall(null)
+    } catch (err) {
+      const error = err as PostgrestError;
+      setErrorMsg(error.message)
+    }
   }
 
   return (
@@ -174,7 +194,7 @@ export function EditDailyCallForm({ onSuccess }: { onSuccess: () => void }) {
               <Select
                 value={categoryValue}
                 onValueChange={(value: "Relevant" | "Spam" | "Not Relevant") =>
-                  setValue("category", value)
+                  setValue("category", value, { shouldDirty: true })
                 }
               >
                 <SelectTrigger>
@@ -207,9 +227,32 @@ export function EditDailyCallForm({ onSuccess }: { onSuccess: () => void }) {
               )}
             </div>
 
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Updating..." : "Update Call"}
-            </Button>
+            <div className="flex justify-between pt-2">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button type="button" variant="destructive" disabled={loading}>
+                    Delete
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will soft-delete the logged call and remove it from the table.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                      Yes, delete it
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              <Button type="submit" disabled={loading || !isDirty}>
+                {loading ? "Updating..." : "Update Call"}
+              </Button>
+            </div>
           </form>
         </ScrollArea>
       </DialogContent>
