@@ -6,6 +6,7 @@ import { Sidebar } from "@/components/dashboard/Sidebar";
 import { DailyCallsTable } from "@/components/daily-calls/DailyCallsTable";
 import { DailyCallForm } from "@/components/daily-calls/DailyCallForm";
 import { EditDailyCallForm } from "@/components/daily-calls/EditDailyCallForm";
+import { ExportDailyCallsDialog } from "@/components/daily-calls/ExportDailyCallsDialog";
 
 export default function DailyCallsPage() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -30,7 +31,10 @@ export default function DailyCallsPage() {
                   Log and monitor unique daily calls. Submit by 7:30 PM.
                 </p>
               </div>
-              <DailyCallForm onSuccess={handleSuccess} />
+              <div className="flex items-center gap-2">
+                <ExportDailyCallsDialog />
+                <DailyCallForm onSuccess={handleSuccess} />
+              </div>
             </div>
 
             <DailyCallsTable refreshTrigger={refreshTrigger} />

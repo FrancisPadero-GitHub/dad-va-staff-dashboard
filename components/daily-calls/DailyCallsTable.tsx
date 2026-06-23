@@ -28,6 +28,7 @@ const appTheme = themeQuartz.withParams({
   selectedRowBackgroundColor: "var(--secondary)",
   fontFamily: "var(--font-sans)",
   wrapperBorderRadius: "var(--radius-md)",
+  browserColorScheme: "dark",
 })
 
 export type DailyCall = {
