@@ -207,23 +207,7 @@ export function Sidebar() {
           ))}
         </div>
 
-        <div className="my-3 h-px w-full bg-border" />
 
-        <div className="mb-2 text-[10px] font-medium tracking-widest text-muted-foreground uppercase">
-          Net Formula
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <div className="flex items-baseline justify-between text-xs">
-            <span className="text-muted-foreground">Step 1</span>
-            <span className="font-mono font-medium text-primary">
-              Gross − Parts
-            </span>
-          </div>
-          <div className="flex items-baseline justify-between text-xs">
-            <span className="text-muted-foreground">Step 2</span>
-            <span className="font-mono font-medium text-primary">× Co %</span>
-          </div>
-        </div>
       </div>
     </aside>
   )
