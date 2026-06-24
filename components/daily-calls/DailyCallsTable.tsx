@@ -184,7 +184,7 @@ export function DailyCallsTable() {
               setEditModalOpen(true)
             }
           }}
-          rowSelection="single"
+          rowSelection={{ mode: "singleRow", checkboxes: false }}
           loading={isFetching}
           overlayLoadingTemplate={
             '<span class="ag-overlay-loading-center">Refreshing...</span>'

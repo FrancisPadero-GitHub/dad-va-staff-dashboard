@@ -47,7 +47,7 @@ export function Topbar() {
       <div className="flex items-center gap-4">
         {/* Logo */}
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg shadow-sm overflow-hidden bg-white">
-          <Image src="/ducts_all_done.webp" alt="Ducts All Done" width={40} height={40} className="object-contain" />
+          <Image src="/ducts_all_done.webp" alt="Ducts All Done" width={40} height={40} className="object-contain w-auto h-auto" />
         </div>
         <div className="flex flex-col">
           <div className="text-xl font-extrabold tracking-wider text-primary uppercase leading-none" style={{ fontFamily: 'var(--font-barlow-condensed)' }}>

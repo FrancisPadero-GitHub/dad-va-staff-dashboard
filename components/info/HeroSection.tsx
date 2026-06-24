@@ -7,7 +7,7 @@ export function HeroSection() {
       <div className="mx-auto flex max-w-4xl flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-4">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm overflow-hidden border">
-            <Image src="/ducts_all_done.webp" alt="Logo" width={56} height={56} className="object-contain" />
+            <Image src="/ducts_all_done.webp" alt="Logo" width={56} height={56} className="object-contain w-auto h-auto" />
           </div>
           <div className="flex flex-col">
             <h1 className="text-3xl font-extrabold uppercase leading-none tracking-wider text-primary" style={{ fontFamily: 'var(--font-barlow-condensed)' }}>
