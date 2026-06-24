@@ -4,4 +4,4 @@ allowBuilds:
   sharp: true
   unrs-resolver: true
   msw: false
-  core-js: set this to true or false
+  core-js: true
