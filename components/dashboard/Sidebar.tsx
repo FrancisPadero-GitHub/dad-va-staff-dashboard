@@ -184,28 +184,27 @@ export function Sidebar() {
           Commission Rates
         </div>
         <div className="flex flex-col gap-1.5">
-          <div className="flex items-baseline justify-between text-xs">
-            <span className="text-muted-foreground">Sub/3Bros</span>
-            <span className="font-mono font-medium text-foreground">50/50</span>
-          </div>
-          <div className="flex items-baseline justify-between text-xs">
-            <span className="text-muted-foreground">Aviran</span>
-            <span className="font-mono font-medium text-foreground">
-              60% co
-            </span>
-          </div>
-          <div className="flex items-baseline justify-between text-xs">
-            <span className="text-muted-foreground">Tamir</span>
-            <span className="font-mono font-medium text-amber-500">
-              75% co ⚠
-            </span>
-          </div>
-          <div className="flex items-baseline justify-between text-xs">
-            <span className="text-muted-foreground">Shalom</span>
-            <span className="font-mono font-medium text-foreground">
-              75% co
-            </span>
-          </div>
+          {Object.entries(
+            checklistData.commissionRates.reduce((acc, rate) => {
+              const prop = rate.proprietor.replace(" - Proprietor", "");
+              if (!acc[prop]) acc[prop] = [];
+              acc[prop].push(rate);
+              return acc;
+            }, {} as Record<string, typeof checklistData.commissionRates>)
+          ).map(([proprietor, rates], groupIndex) => (
+            <div key={proprietor} className="flex flex-col gap-1.5">
+              {groupIndex > 0 && <div className="my-1.5 h-px w-full bg-border/50" />}
+              <div className="text-[9px] font-semibold text-muted-foreground uppercase tracking-widest">{proprietor}</div>
+              {rates.map((rate, i) => (
+                <div key={i} className="flex items-baseline justify-between text-xs">
+                  <span className="text-muted-foreground truncate mr-2" title={`${rate.name} (${rate.proprietor})`}>
+                    {rate.name}
+                  </span>
+                  <span className="font-mono font-medium text-foreground shrink-0">{rate.commission}</span>
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
 
         <div className="my-3 h-px w-full bg-border" />

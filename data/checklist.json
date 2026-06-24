@@ -201,14 +201,15 @@
     }
   ],
   "commissionRates": [
-    { "tech": "Aviran", "split": "40% tech / 60% co", "coNet": "60%", "note": "Highest earner — double-check every payout" },
-    { "tech": "Tamir", "split": "25% tech / 75% co", "coNet": "75%", "note": "⚠ Changed from 50/50 in April — confirm current rate with Martin" },
-    { "tech": "Shalom", "split": "25% tech / 75% co", "coNet": "75%", "note": "Confirm still current" },
-    { "tech": "Sub", "split": "50% / 50%", "coNet": "50%", "note": "—" },
-    { "tech": "3 Bros - SUB", "split": "50% / 50%", "coNet": "50%", "note": "—" },
-    { "tech": "Sub - DAD", "split": "50% / 50%", "coNet": "50%", "note": "—" },
-    { "tech": "3 Bros - DAD", "split": "50% / 50%", "coNet": "50%", "note": "NOT 75% — common error" },
-    { "tech": "Yotam", "split": "50% / 50%", "coNet": "50%", "note": "—" }
+    { "name": "Sub", "commission": "50%", "jobs": 398, "hired": "3/3/2026", "proprietor": "Ducts All Done", "contact": "sub@gmail.com" },
+    { "name": "Tamir", "commission": "25%", "jobs": 299, "hired": "3/3/2026", "proprietor": "3 BROS - Proprietor", "contact": "tamir@gmail.com" },
+    { "name": "Sub", "commission": "50%", "jobs": 237, "hired": "4/23/2026", "proprietor": "3 BROS - Proprietor", "contact": "3brossub@gmail.com" },
+    { "name": "Aviran", "commission": "40%", "jobs": 144, "hired": "3/3/2026", "proprietor": "Ducts All Done", "contact": "aviran@gmail.com" },
+    { "name": "3 Bros", "commission": "50%", "jobs": 102, "hired": "4/23/2026", "proprietor": "Ducts All Done", "contact": "3brosdad@gmail.com" },
+    { "name": "Aviran", "commission": "40%", "jobs": 11, "hired": "6/2/2026", "proprietor": "3 BROS - Proprietor", "contact": "aviran@gmail.com" },
+    { "name": "Tamir", "commission": "25%", "jobs": 11, "hired": "6/2/2026", "proprietor": "Ducts All Done", "contact": "tamir@gmail.com" },
+    { "name": "Aviran", "commission": "40%", "jobs": 1, "hired": "6/3/2026", "proprietor": "Sub - Proprietor", "contact": "aviransub@gmail.com" },
+    { "name": "Tamir", "commission": "25%", "jobs": 0, "hired": "6/3/2026", "proprietor": "Sub - Proprietor", "contact": "tamirsub@gmail.com" }
   ],
   "formulas": [
     { "step": "Step 1", "equation": "Net After Parts = Gross − Parts Cost", "example": "$1,799 − $50 = $1,749" },
